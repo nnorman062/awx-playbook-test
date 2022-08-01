@@ -12,9 +12,9 @@
       register: docker_images
 
     - name: Get infos on container
-       docker_container_info:
-         name: "{{ item.split(' ')[0]}}"
-       register: result
+      docker_container_info:
+        name: "{{ item.split(' ')[0]}}"
+      register: result
 
     - name: Does container exist?
       debug:
