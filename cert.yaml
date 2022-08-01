@@ -1,0 +1,20 @@
+- name: update cert & key
+  hosts: all
+    
+  tasks:
+
+  - name: copy existing key to old
+    shell: cp /etc/cyolo/certs/key.pem /etc/cyolo/certs/key-$(date +%F)
+
+  - name: copy existing cert to old
+    shell: cp /etc/cyolo/certs/cert.pem /etc/cyolo/certs/cert-$(date +%F)
+  
+  - name: update key
+    copy:
+      dest: "/etc/cyolo/certs/key.pem"
+      content: '{{ ssl_key }}'
+
+  - name: update cert
+    copy:
+      dest: "/etc/cyolo/certs/cert.pem"
+      content: '{{ ssl_cert }}'
