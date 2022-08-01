@@ -1,0 +1,33 @@
+- name: restart edges
+  hosts: all
+
+  vars:
+    - image_1: '--filter ancestor=cyolosec/router:latest'
+    - image_2: '--filter ancestor=containrrr/watchtower'
+    - image_3: '--filter ancestor=nats:latest'
+
+  tasks:
+    - name: Get images name
+      command: docker container ls -a {{ image_1 }} {{ image_2 }} --format "{{ '{{' }}.Names {{ '}}' }} {{ '{{' }}.Image {{ '}}' }}"
+      register: docker_images
+
+    - name: Get infos on container
+       docker_container_info:
+         name: "{{ item.split(' ')[0]}}"
+       register: result
+
+    - name: Does container exist?
+      debug:
+        msg: "The container {{ 'exists' if result.exists else 'does not exist' }}"
+
+    - name: Print the status of the container
+      debug:
+        msg: "The container status is {{ result.container['State']['Status'] }}"
+      when: result.exists
+
+    - name: Restart images
+      docker_container:
+        name: config_router_1
+        state: started
+        restart: yes
+      loop: "{{ docker_images.stdout_lines}}"
