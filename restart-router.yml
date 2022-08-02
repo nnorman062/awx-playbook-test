@@ -30,9 +30,9 @@
         msg: "The container status is {{ result.container['State']['Status'] }}"
       when: result.exists
 
-    - name: Restart images
+    - name: Restart container router
       docker_container:
         name: config_router_1
         state: started
         restart: yes
-      loop: "{{ docker_images.stdout_lines}}"
+      #loop: "{{ docker_images.stdout_lines}}"
