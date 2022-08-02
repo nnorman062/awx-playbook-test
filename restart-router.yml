@@ -1,22 +1,9 @@
 - name: restart edges
   hosts: all
 
-  #vars:
-    #- image_1: '--filter ancestor=cyolosec/router:latest'
-    #- image_2: '--filter ancestor=containrrr/watchtower'
-    #- image_3: '--filter ancestor=nats:latest'
-
   tasks:
-    #- name: Get images name
-      #command: docker container ls -a {{ image_1 }} {{ image_2 }} --format "{{ '{{' }}.Names {{ '}}' }} {{ '{{' }}.Image {{ '}}' }}"
-      #register: docker_images
 
-    #- name: Get infos on container
-      #docker_container_info:
-        #name: "{{ item.split(' ')[0]}}"
-      #register: result
-
-    - name: Get infos on container
+    - name: Get container info
       docker_container_info:
         name: config_router_1
       register: result
@@ -27,7 +14,7 @@
 
     - name: Print the status of the container
       debug:
-        msg: "The container status is {{ result.container['State']['Status'] }}"
+        msg: "The container status is {{ result.container['State']['Status'] }}, since {{ result.container['Created'] }}"
       when: result.exists
 
     - name: Restart container router
@@ -35,4 +22,14 @@
         name: config_router_1
         state: started
         restart: yes
-      #loop: "{{ docker_images.stdout_lines}}"
+        loop_control:
+          pause: 60
+
+    - name: Get container info after restart
+      docker_container_info:
+        name: config_router_1
+      register: result
+
+    - name: Print the status of the container after restart
+      debug:
+        msg: "The container status is {{ result.container['State']['Status'] }}, since {{ result.container['Created'] }}"
