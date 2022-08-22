@@ -14,7 +14,7 @@
 
     - name: Print the status of the container
       debug:
-        msg: "The container status is {{ result.container['State']['Status'] }}, since {{ result.container['Created'] }}"
+        msg: "The container status is {{ result.container['State']['Status'] }}, since {{ result.container['StartedAt'] }}"
       when: result.exists
 
     - name: Restart container router
@@ -30,10 +30,7 @@
 
     - name: Print the status of the container after restart
       debug:
-        msg: "The container status is {{ result.container['State']['Status'] }}, since {{ result.container['Created'] }}"
+        msg: "The container status is {{ result.container['State']['Status'] }}, since {{ result.container['StartedAt'] }}"
       when: result2.exists
-
-    - name: Delete Backup KEY
-      shell: rm -rf /etc/cyolo/certs/key.pem.backup
       loop_control:
           pause: 120
