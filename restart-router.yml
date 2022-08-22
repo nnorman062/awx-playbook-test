@@ -14,7 +14,7 @@
 
     - name: Print the status of the container
       debug:
-        msg: "The container status is {{ result.container['State']['Status'] }}, since {{ result.container['StartedAt'] }}"
+        msg: "The container status is {{ result.container['State']['Status'] }}, since {{ result.container['State']['StartedAt'] }}"
       when: result.exists
 
     - name: Restart container router
@@ -30,7 +30,7 @@
 
     - name: Print the status of the container after restart
       debug:
-        msg: "The container status is {{ result.container['State']['Status'] }}, since {{ result.container['StartedAt'] }}"
+        msg: "The container status is {{ result.container['State']['Status'] }}, since {{ result.container['State']['StartedAt'] }}"
       when: result2.exists
       loop_control:
-          pause: 120
+          pause: 30
