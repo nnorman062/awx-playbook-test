@@ -22,14 +22,18 @@
         name: config_router_1
         state: started
         restart: yes
-        loop_control:
-          pause: 60
 
     - name: Get container info after restart
       docker_container_info:
         name: config_router_1
-      register: result
+      register: result2
 
     - name: Print the status of the container after restart
       debug:
         msg: "The container status is {{ result.container['State']['Status'] }}, since {{ result.container['Created'] }}"
+      when: result2.exists
+
+    - name: Delete Backup KEY
+      shell: rm -rf /etc/cyolo/certs/key.pem.backup
+      loop_control:
+          pause: 120
