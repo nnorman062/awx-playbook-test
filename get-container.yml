@@ -1,0 +1,19 @@
+---
+- name: GET CONTAINER INFO
+  hosts: "{{ variable_host | default('all') }}"
+
+  tasks:
+
+  - name: Get container info
+    docker_container_info:
+      name: '{{ container_name }}'
+    register: result
+
+  - name: Does container exist?
+    debug:
+      msg: "The container {{ 'exists' if result.exists else 'does not exist' }}"
+
+  - name: Print the status of the container
+    debug:
+      msg: "The container status is {{ result.container['State']['Status'] }}, since {{ result.container['State']['StartedAt'] }}"
+    when: result.exists
